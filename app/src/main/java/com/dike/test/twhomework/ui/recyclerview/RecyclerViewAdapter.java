@@ -69,6 +69,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolde
         return holderHull;
     }
 
+    @Override
+    public int getItemViewType(int position)
+    {
+        TItem item = getItem(position);
+        return null == item ? super.getItemViewType(position) : item.getViewType();
+    }
 
     @Override
     public void onBindViewHolder(TRecyclerViewHolder holder, int position)
@@ -76,6 +82,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolde
         onBindViewHolder(holder, position,null);
     }
 
+    @Override
+    public void onViewRecycled(@NonNull TRecyclerViewHolder holder)
+    {
+        super.onViewRecycled(holder);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView)
+    {
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
 
     @Override
     public void onBindViewHolder(TRecyclerViewHolder holder, int position, List<Object> payloads)
@@ -90,6 +107,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolde
             holder.getHolderCore().refresh(getItem(position),position,getItemCount(),payloads);
         }
     }
+
 
     public TItem getItem(int position)
     {
