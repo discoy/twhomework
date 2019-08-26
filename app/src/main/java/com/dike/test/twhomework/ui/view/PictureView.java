@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,12 +27,12 @@ public class PictureView extends RelativeLayout
     private static final int COLUMN = 3;
 
     private static List<View> mViewPool = new ArrayList<>();
-    private static int mMaxViewPoolSize = 30;
+    private static int mMaxViewPoolSize = 50;
 
     private int mMaxPictureCount = DEF_MAX_PICTURE_COUNT;
     private int mRowMargin = 10;
     private int mColumnMargin = 10;
-
+    private String[] mPhotoUrls;
 
     public PictureView(Context context)
     {
@@ -48,6 +49,18 @@ public class PictureView extends RelativeLayout
     private void init()
     {
         setBackgroundColor(Color.WHITE);
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
+        {
+            @Override
+            public void onGlobalLayout()
+            {
+                if(0 != getWidth())
+                {
+                    addPhotoView(mPhotoUrls);
+                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            }
+        });
     }
 
     private synchronized static boolean addViewToPool(View view)
@@ -97,18 +110,51 @@ public class PictureView extends RelativeLayout
 
     public void setPictures(String[] urls)
     {
+//        if(null == urls || 0 == urls.length)
+//        {
+//            return;
+//        }
+        this.mPhotoUrls = urls;
+        if(0 < getWidth())
+        {
+            addPhotoView(urls);
+        }
+//        measure();
+//        int validPictureCount = Math.min(mMaxPictureCount,urls.length);
+//        if(1 == validPictureCount)
+//        {
+//            ImageView imageView = new ImageView(getContext());
+//            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT
+//                    ,LinearLayout.LayoutParams.WRAP_CONTENT);
+//            addView(imageView,layoutParams);
+//
+//            Glide.with(this).load(R.mipmap.ic_launcher).into(imageView);
+//        }
+//        else
+//        {
+////            int row = (int) Math.ceil(validPictureCount * 1.0 / COLUMN);
+////            LinearLayout layoutRow;
+//            ImageView itemIv;
+//            for(int i = 0; i < validPictureCount; i++)
+//            {
+//                itemIv = getItemView((int) Math.floor(i * 1.0 / COLUMN),i % COLUMN);
+//                addView(itemIv);
+//                Glide.with(this).load(R.mipmap.ic_launcher).into(itemIv);
+//            }
+//        }
+    }
+
+    private void addPhotoView(String[] urls)
+    {
         if(null == urls || 0 == urls.length)
         {
             return;
         }
-        measure();
         int validPictureCount = Math.min(mMaxPictureCount,urls.length);
         if(1 == validPictureCount)
         {
-            ImageView imageView = new ImageView(getContext());
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT
-                    ,LinearLayout.LayoutParams.WRAP_CONTENT);
-            addView(imageView,layoutParams);
+            ImageView imageView = getItemView(-1,-1);
+            addView(imageView);
 
             Glide.with(this).load(R.mipmap.ic_launcher).into(imageView);
         }
@@ -172,7 +218,7 @@ public class PictureView extends RelativeLayout
 
     private int getRowItemWidth()
     {
-        return (getMeasuredWidth() - getPaddingLeft() - getPaddingRight()
+        return (getWidth() - getPaddingLeft() - getPaddingRight()
                 - (COLUMN + 1) * mColumnMargin) / COLUMN;
     }
 
@@ -196,13 +242,22 @@ public class PictureView extends RelativeLayout
             imageView = new ImageView(getContext());
             imageView.setBackgroundColor(Color.GRAY);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+        if(rowIndex < 0 && columnIndex < 0)
+        {
+            LayoutParams layoutParams = new LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT
+                    ,LinearLayout.LayoutParams.WRAP_CONTENT);
+            imageView.setLayoutParams(layoutParams);
+        }
+        else
+        {
             int itemWidth = getRowItemWidth();
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(itemWidth,itemWidth);
+            LayoutParams layoutParams = new LayoutParams(itemWidth,itemWidth);
             layoutParams.leftMargin = mColumnMargin + columnIndex * (mColumnMargin + itemWidth);
             layoutParams.topMargin = rowIndex * (mRowMargin + itemWidth);
             imageView.setLayoutParams(layoutParams);
-        }
 
+        }
 
         return imageView;
     }

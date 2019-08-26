@@ -1,6 +1,7 @@
 package com.dike.test.twhomework.ui.viewholder;
 
 import android.view.View;
+import android.widget.TextView;
 
 import com.dike.test.twhomework.R;
 import com.dike.test.twhomework.entity.DemoItem;
@@ -11,7 +12,8 @@ import com.dike.test.twhomework.utils.CommonUtil;
 public class ViewHolderOnPicture extends AViewHolder<DemoItem>
 {
     private PictureView mPv;
-    ViewHolderOnPicture()
+    private TextView mContentTv;
+    public ViewHolderOnPicture()
     {
         CommonUtil.i("AViewHolder",""+hashCode());
     }
@@ -20,6 +22,7 @@ public class ViewHolderOnPicture extends AViewHolder<DemoItem>
     protected void onInitView(View content)
     {
         mPv = content.findViewById(R.id.id_tweets_photo_pv);
+        mContentTv = content.findViewById(R.id.id_tweets_content_tv);
     }
 
     @Override
@@ -48,6 +51,8 @@ public class ViewHolderOnPicture extends AViewHolder<DemoItem>
     {
         super.refresh(item, position, totalCount, payloads);
 
+        CommonUtil.i("item.getPhotoUrls().lenght="+item.getPhotoUrls().length,"posi="+position);
         mPv.setPictures(item.getPhotoUrls());
+        mContentTv.setText("item.getPhotoUrls().lenght="+item.getPhotoUrls().length);
     }
 }

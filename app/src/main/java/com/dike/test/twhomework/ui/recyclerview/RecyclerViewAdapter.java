@@ -91,11 +91,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolde
         CommonUtil.i("AViewHolder-Recycled",holder.getHolderCore().hashCode()+"");
     }
 
-    @Override
-    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView)
-    {
-        super.onDetachedFromRecyclerView(recyclerView);
-    }
 
     @Override
     public void onBindViewHolder(TRecyclerViewHolder holder, int position, List<Object> payloads)
@@ -120,6 +115,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolde
         }
         return null;
     }
+
+
 
     @Override
     public int getItemCount()
