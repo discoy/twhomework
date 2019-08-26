@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:padding="10dp"
     >
 
     <ImageView
@@ -33,6 +34,12 @@
             android:textColor="@color/black"
             />
 
+        <com.dike.test.twhomework.ui.view.PictureView
+            android:id="@+id/id_tweets_photo_pv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/id_activity_main_user_avatar_iv"
+            />
     </LinearLayout>
 
 

@@ -33,6 +33,11 @@ public abstract class AViewHolder<T extends TItem>
         mCurPos = position;
     }
 
+    public void recycle()
+    {
+
+    }
+
 
     /**
      * 初始化view，子类必须实现

@@ -5,6 +5,12 @@ public class TItem
     protected boolean mIsVisible;
     private int mViewType;
 
+    public TItem()
+    {
+        mViewType = 0;
+        mIsVisible = true;
+    }
+
 
     public void setVisible(boolean mIsVisible)
     {

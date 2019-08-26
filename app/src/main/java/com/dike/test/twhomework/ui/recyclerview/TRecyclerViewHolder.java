@@ -8,9 +8,10 @@ class TRecyclerViewHolder extends RecyclerView.ViewHolder
 {
     private AViewHolder mHolderCore;
 
-    public TRecyclerViewHolder(@NonNull View itemView,AViewHolder mHolderCore)
+    public TRecyclerViewHolder(@NonNull View itemView,AViewHolder aHolderCore)
     {
         super(itemView);
+        this.mHolderCore = aHolderCore;
     }
 
     public AViewHolder getHolderCore()

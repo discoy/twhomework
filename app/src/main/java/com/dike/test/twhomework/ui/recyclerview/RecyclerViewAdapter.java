@@ -7,6 +7,8 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.dike.test.twhomework.utils.CommonUtil;
+
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolder>
@@ -85,7 +87,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolde
     @Override
     public void onViewRecycled(@NonNull TRecyclerViewHolder holder)
     {
-        super.onViewRecycled(holder);
+        holder.getHolderCore().recycle();
+        CommonUtil.i("AViewHolder-Recycled",holder.getHolderCore().hashCode()+"");
     }
 
     @Override
