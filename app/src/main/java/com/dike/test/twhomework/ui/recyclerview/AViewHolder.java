@@ -9,7 +9,7 @@ public abstract class AViewHolder<T extends TItem>
     private View mContentView;
     private TItem mCurItem;
     private int mCurPos;
-
+    private Object mHost;
 
     public View getView(LayoutInflater mInflater)
     {
@@ -27,7 +27,17 @@ public abstract class AViewHolder<T extends TItem>
         return mContentView;
     }
 
-    public void refresh(T item, int position, int totalCount,Object... payloads)
+    public void setHost(Object mHost)
+    {
+        this.mHost = mHost;
+    }
+
+    public Object getHost()
+    {
+        return mHost;
+    }
+
+    public void refresh(T item, int position, int totalCount, Object... payloads)
     {
         mCurItem = item;
         mCurPos = position;

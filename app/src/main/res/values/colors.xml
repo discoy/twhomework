@@ -6,4 +6,10 @@
 
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
+
+    <color name="prv_color_progressbar_start">#FFFFFFFF</color>
+    <color name="prv_color_progressbar_end">#FF000000</color>
+
+    <color name="prv_color_text_title">#FF535353</color>
+    <color name="prv_color_text_content">#FF535353</color>
 </resources>

@@ -21,13 +21,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolde
     private SparseArray<Class<? extends AViewHolder>> mViewHolders;
     private LayoutInflater mInflater;
     private int mOrientation = ORIENTATION_VERTIVAL;
+    private Object mHost;
 
-    public RecyclerViewAdapter(Context context,List<? extends TItem> items,
+    public RecyclerViewAdapter(Context context,Object host,List<? extends TItem> items,
             SparseArray<Class<? extends AViewHolder>> viewHolders)
     {
         this.mItem = items;
         this.mViewHolders = viewHolders;
         this.mInflater = LayoutInflater.from(context);
+        this.mHost = host;
     }
 
     @NonNull
@@ -47,6 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TRecyclerViewHolde
         }
         if(null != realViewHolder)
         {
+            realViewHolder.setHost(mHost);
             holderHull = new TRecyclerViewHolder(realViewHolder.getView(mInflater),realViewHolder);
             RecyclerView.LayoutParams lp;
             if(ORIENTATION_VERTIVAL == mOrientation)

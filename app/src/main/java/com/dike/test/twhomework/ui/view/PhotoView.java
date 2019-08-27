@@ -13,6 +13,7 @@ import android.widget.TableLayout;
 
 import com.bumptech.glide.Glide;
 import com.dike.test.twhomework.R;
+import com.dike.test.twhomework.domain.AsyImageLoaderWrapper;
 import com.dike.test.twhomework.utils.CommonUtil;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
 
 import static android.support.v7.widget.RecyclerView.HORIZONTAL;
 
-public class PictureView extends RelativeLayout
+public class PhotoView extends RelativeLayout
 {
     private static final String TAG = "PictureView";
     private static final int DEF_MAX_PICTURE_COUNT = 9;
@@ -28,19 +29,20 @@ public class PictureView extends RelativeLayout
 
     private static List<View> mViewPool = new ArrayList<>();
     private static int mMaxViewPoolSize = 50;
+    private static int mVisibleWidth;
 
     private int mMaxPictureCount = DEF_MAX_PICTURE_COUNT;
     private int mRowMargin = 10;
     private int mColumnMargin = 10;
     private String[] mPhotoUrls;
 
-    public PictureView(Context context)
+    public PhotoView(Context context)
     {
         super(context);
         init();
     }
 
-    public PictureView(Context context, AttributeSet attrs)
+    public PhotoView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         init();
@@ -54,14 +56,20 @@ public class PictureView extends RelativeLayout
             @Override
             public void onGlobalLayout()
             {
-                if(0 != getWidth())
+                CommonUtil.i("setPictures-on","getWidth="+mVisibleWidth+"hashcode="+hashCode());
+                if(mVisibleWidth > 0)
                 {
                     addPhotoView(mPhotoUrls);
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
+                else
+                {
+                    mVisibleWidth = getWidth();
+                }
             }
         });
     }
+
 
     private synchronized static boolean addViewToPool(View view)
     {
@@ -110,38 +118,17 @@ public class PictureView extends RelativeLayout
 
     public void setPictures(String[] urls)
     {
-//        if(null == urls || 0 == urls.length)
-//        {
-//            return;
-//        }
         this.mPhotoUrls = urls;
-        if(0 < getWidth())
+
+        CommonUtil.i("setPictures","mVisibleWidth="+mVisibleWidth+",urls="+urls.length+"hashcode="+hashCode());
+        if(0 < mVisibleWidth)
         {
             addPhotoView(urls);
         }
-//        measure();
-//        int validPictureCount = Math.min(mMaxPictureCount,urls.length);
-//        if(1 == validPictureCount)
-//        {
-//            ImageView imageView = new ImageView(getContext());
-//            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT
-//                    ,LinearLayout.LayoutParams.WRAP_CONTENT);
-//            addView(imageView,layoutParams);
-//
-//            Glide.with(this).load(R.mipmap.ic_launcher).into(imageView);
-//        }
-//        else
-//        {
-////            int row = (int) Math.ceil(validPictureCount * 1.0 / COLUMN);
-////            LinearLayout layoutRow;
-//            ImageView itemIv;
-//            for(int i = 0; i < validPictureCount; i++)
-//            {
-//                itemIv = getItemView((int) Math.floor(i * 1.0 / COLUMN),i % COLUMN);
-//                addView(itemIv);
-//                Glide.with(this).load(R.mipmap.ic_launcher).into(itemIv);
-//            }
-//        }
+        else
+        {
+            CommonUtil.i("setPictures","getWidth=0,urls="+urls.length+"hashcode="+hashCode());
+        }
     }
 
     private void addPhotoView(String[] urls)
@@ -155,78 +142,26 @@ public class PictureView extends RelativeLayout
         {
             ImageView imageView = getItemView(-1,-1);
             addView(imageView);
-
-            Glide.with(this).load(R.mipmap.ic_launcher).into(imageView);
+            AsyImageLoaderWrapper.displayImage(this,urls[0],imageView);
         }
         else
         {
-//            int row = (int) Math.ceil(validPictureCount * 1.0 / COLUMN);
-//            LinearLayout layoutRow;
             ImageView itemIv;
             for(int i = 0; i < validPictureCount; i++)
             {
                 itemIv = getItemView((int) Math.floor(i * 1.0 / COLUMN),i % COLUMN);
                 addView(itemIv);
-                Glide.with(this).load(R.mipmap.ic_launcher).into(itemIv);
+                AsyImageLoaderWrapper.displayImage(this,urls[i],itemIv);
             }
         }
     }
 
 
-    private void measure()
-    {
-
-        ViewGroup.LayoutParams layoutParams = getLayoutParams();
-        if (layoutParams == null)
-        {
-            // 标签默认宽度占满parent
-            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            setLayoutParams(layoutParams);
-        }
-
-        // 测量高度
-        int heightMode = View.MeasureSpec.getMode(layoutParams.height);
-        int heightSize = View.MeasureSpec.getSize(layoutParams.height);
-
-        if (heightMode == View.MeasureSpec.UNSPECIFIED)
-        {
-            heightMode = View.MeasureSpec.EXACTLY;
-        }
-        View parent = null == getParent() ? null : (View) getParent();
-        if(null == parent)
-        {
-            return;
-        }
-        int maxHeight = parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom();
-        if (heightSize > maxHeight)
-        {
-            heightSize = maxHeight;
-        }
-
-
-        int ws = View.MeasureSpec.makeMeasureSpec(parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight(), View.MeasureSpec.EXACTLY);
-        int hs = View.MeasureSpec.makeMeasureSpec(heightSize, heightMode);
-        measure(ws, hs);
-
-//        int width = View.MeasureSpec.makeMeasureSpec(0,
-//                View.MeasureSpec.UNSPECIFIED);
-//        int height = View.MeasureSpec.makeMeasureSpec(0,
-//                View.MeasureSpec.UNSPECIFIED);
-//        //调用measure方法之后就可以获取宽高
-//        measure(width, height);
-    }
 
     private int getRowItemWidth()
     {
-        return (getWidth() - getPaddingLeft() - getPaddingRight()
+        return (mVisibleWidth - getPaddingLeft() - getPaddingRight()
                 - (COLUMN + 1) * mColumnMargin) / COLUMN;
-    }
-
-    private LinearLayout.LayoutParams getRowLayoutParams()
-    {
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT
-                ,getRowItemWidth());
-        return layoutParams;
     }
 
     private ImageView getItemView(int rowIndex,int columnIndex)

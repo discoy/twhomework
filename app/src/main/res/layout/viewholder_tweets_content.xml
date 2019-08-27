@@ -34,12 +34,16 @@
             android:textColor="@color/black"
             />
 
-        <com.dike.test.twhomework.ui.view.PictureView
+        <com.dike.test.twhomework.ui.view.PhotoView
             android:id="@+id/id_tweets_photo_pv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/id_activity_main_user_avatar_iv"
             />
+        <com.dike.test.twhomework.ui.view.CommentView
+            android:id="@+id/id_tweets_sender_cv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 

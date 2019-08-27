@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="prv_size_text_title">18dp</dimen>
+    <dimen name="prv_size_text_content">10dp</dimen>
+</resources>

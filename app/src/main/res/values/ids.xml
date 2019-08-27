@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="comment_view_avatar_iv" type="id"/>
+    <item name="comment_view_nickname_tv" type="id"/>
+    <item name="comment_view_content_tv" type="id"/>
+
+    <!-- PullToRreshView -->
+    <item name="prv_head_view" type="id"/>
+    <item name="prv_content_view" type="id"/>
+    <item name="prv_foot_view" type="id"/>
+</resources>

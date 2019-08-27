@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">tw-homework</string>
+
+    <!-- Pullrefreshview-->
+    <string name="common_pullview_pulldownrefresh_label">下拉刷新</string>
+    <string name="common_pullview_pulldownload_label">释放刷新</string>
+    <string name="common_pullview_pulluprefresh_label">上拉加载更多</string>
+    <string name="common_pullview_pullupload_label">释放加载更多</string>
+    <string name="common_pullview_refresh_time">上次更新：%1$s</string>
+    <string name="common_pullview_refreshing_label">正在刷新&#8230;</string>
+    <string name="common_pullview_loading_label">正在加载&#8230;</string>
 </resources>

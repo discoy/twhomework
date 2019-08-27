@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- ListView的头部 -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    >
+
+    <!-- 内容 -->
+
+    <RelativeLayout
+        android:id="@+id/foot_contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp" >
+
+        <!-- 箭头图像、进度条 -->
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" >
+
+            <!-- 箭头 -->
+
+            <ImageView
+                android:id="@+id/foot_arrowImageView"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_prv_up_arrow" />
+
+            <!-- 进度条 -->
+
+            <ProgressBar
+                android:id="@+id/foot_progressBar"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_gravity="center"
+                android:indeterminateDrawable="@drawable/bg_prv_progressbar_circle"
+                android:visibility="invisible"
+                />
+        </FrameLayout>
+
+        <!-- 提示、最近更新 -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <!-- 提示 -->
+            <TextView
+                android:id="@+id/foot_tipsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/prv_color_text_title"
+                android:textSize="@dimen/prv_size_text_title" />
+
+            <!-- 最近更新 -->
+
+            <TextView
+                android:id="@+id/foot_lastUpdatedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/prv_color_text_content"
+                android:textSize="@dimen/prv_size_text_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>
