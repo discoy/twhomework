@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements IAction.OnResultL
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mRv = findViewById(R.id.id_activity_main_content_rv);
         mPullToRefreshView  = findViewById(R.id.id_activity_main_content_ptr);
         mPullToRefreshView.setContentView(null,mRv);

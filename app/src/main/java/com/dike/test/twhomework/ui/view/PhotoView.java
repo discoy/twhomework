@@ -1,25 +1,22 @@
 package com.dike.test.twhomework.ui.view;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
 
-import com.bumptech.glide.Glide;
-import com.dike.test.twhomework.R;
 import com.dike.test.twhomework.domain.AsyImageLoaderWrapper;
 import com.dike.test.twhomework.utils.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.support.v7.widget.RecyclerView.HORIZONTAL;
 
 public class PhotoView extends RelativeLayout
 {
@@ -29,8 +26,8 @@ public class PhotoView extends RelativeLayout
 
     private static List<View> mViewPool = new ArrayList<>();
     private static int mMaxViewPoolSize = 50;
-    private static int mVisibleWidth;
 
+    private  int mAvailableWidth;
     private int mMaxPictureCount = DEF_MAX_PICTURE_COUNT;
     private int mRowMargin = 10;
     private int mColumnMargin = 10;
@@ -56,15 +53,16 @@ public class PhotoView extends RelativeLayout
             @Override
             public void onGlobalLayout()
             {
-                CommonUtil.i("setPictures-on","getWidth="+mVisibleWidth+"hashcode="+hashCode());
-                if(mVisibleWidth > 0)
+                testMeasure("onGlobalLayout");
+                CommonUtil.i("setPictures-on","getWidth="+ mAvailableWidth +"hashcode="+hashCode());
+                if(mAvailableWidth > 0)
                 {
                     addPhotoView(mPhotoUrls);
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
                 else
                 {
-                    mVisibleWidth = getWidth();
+                    mAvailableWidth = getWidth();
                 }
             }
         });
@@ -118,10 +116,11 @@ public class PhotoView extends RelativeLayout
 
     public void setPictures(String[] urls)
     {
+        testMeasure("setPictures");
         this.mPhotoUrls = urls;
 
-        CommonUtil.i("setPictures","mVisibleWidth="+mVisibleWidth+",urls="+urls.length+"hashcode="+hashCode());
-        if(0 < mVisibleWidth)
+        CommonUtil.i("setPictures","mAvailableWidth="+ mAvailableWidth +",urls="+urls.length+"hashcode="+hashCode());
+        if(0 < mAvailableWidth)
         {
             addPhotoView(urls);
         }
@@ -129,6 +128,39 @@ public class PhotoView extends RelativeLayout
         {
             CommonUtil.i("setPictures","getWidth=0,urls="+urls.length+"hashcode="+hashCode());
         }
+    }
+
+    private void testMeasure(String tag)
+    {
+//        int  widthSpec = View.MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+//        int  heightSpec = View.MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED);
+//        ((ViewGroup)getParent()).measure(widthSpec,heightSpec);
+        int   height = getMeasuredHeight();
+        int   width = getWidth();
+        CommonUtil.i("testMeasure"+tag,"height="+height+"&width="+width +"&getAvailableWidth="+getAvailableWidth()+"&hashcode="+hashCode());
+    }
+
+    private int getAvailableWidth()
+    {
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        if(layoutParams.width > 0)
+        {
+            return layoutParams.width;
+        }
+        else
+        {
+            int paddingHorizontal = 0;
+            ViewParent parent = getParent();
+            while (View.class.isInstance(parent))
+            {
+
+                paddingHorizontal += ((View)parent).getPaddingLeft() + ((View)parent).getPaddingRight();
+                parent = parent.getParent();
+            }
+
+            return CommonUtil.getScreenWidth(getContext()) - paddingHorizontal;
+        }
+
     }
 
     private void addPhotoView(String[] urls)
@@ -160,7 +192,7 @@ public class PhotoView extends RelativeLayout
 
     private int getRowItemWidth()
     {
-        return (mVisibleWidth - getPaddingLeft() - getPaddingRight()
+        return (mAvailableWidth - getPaddingLeft() - getPaddingRight()
                 - (COLUMN + 1) * mColumnMargin) / COLUMN;
     }
 
@@ -208,7 +240,7 @@ public class PhotoView extends RelativeLayout
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        CommonUtil.i(TAG,"onMeasure");
+        CommonUtil.i(TAG,"onMeasure=width="+getMeasuredWidth()+"&height="+getMeasuredHeight());
     }
 
 
